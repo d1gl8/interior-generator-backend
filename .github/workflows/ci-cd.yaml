@@ -1,0 +1,28 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ main ]
+
+env:
+  SSH_USER: ${{ secrets.SSH_USER }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.0
+      with:
+        ssh-private-key: ${{ secrets.SSH_KEY }}
+        ssh-known-hosts: ${{ secrets.KNOWN_HOSTS }}
+      env:
+        SSH_USER: ${{ secrets.SSH_USER }}
+
+    - name: Deploy
+      run: |
+        ssh -o StrictHostKeyChecking=no $SSH_USER@35.187.44.146 'cd /home/deb_admin/foclean-back && git pull origin main && sudo systemctl restart foclean-back'
