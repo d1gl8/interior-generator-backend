@@ -25,14 +25,14 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(formidableMiddleware());
-// app.use((req, res, next) => {
-//   logRequest(req);
-//   next();
-// });
-// axios.interceptors.request.use(logRequest);
-// axios.interceptors.response.use(logResponse);
+app.use((req, res, next) => {
+  logRequest(req);
+  next();
+});
+axios.interceptors.request.use(logRequest);
+axios.interceptors.response.use(logResponse);
 
-app.post("/cleaner/image", async (clientReq, clientRes, next) => {
+app.post("/api/cleaner/image", async (clientReq, clientRes, next) => {
   try {
     const inputFile = clientReq.files.file;
 
@@ -52,7 +52,7 @@ app.post("/cleaner/image", async (clientReq, clientRes, next) => {
   }
 });
 
-app.post("/cleaner/mask", async (clientReq, clientRes) => {
+app.post("/api/cleaner/mask", async (clientReq, clientRes) => {
   try {
     const inputLink = clientReq.fields.image_file;
     const maskFile = clientReq.files.mask_file;
@@ -77,7 +77,7 @@ app.post("/cleaner/mask", async (clientReq, clientRes) => {
   }
 });
 
-app.post("/report/bug", async (clientReq, clientRes) => {
+app.post("/api/report/bug", async (clientReq, clientRes) => {
   try {
     const { name, path } = clientReq.files.report;
     await fsp.writeFile("./reports/" + name, await fsp.readFile(path));
@@ -87,10 +87,10 @@ app.post("/report/bug", async (clientReq, clientRes) => {
   }
 });
 
-// app.use((err, req, res, next) => {
-//   console.log(err);
-//   logResponse(res);
-// });
+app.use((err, req, res, next) => {
+  console.log(err);
+  logResponse(res);
+});
 
 // const server = https.createServer(options, (req, res) => {
 //   app(req, res);
