@@ -25,4 +25,4 @@ jobs:
 
     - name: Deploy
       run: |
-        ssh -o StrictHostKeyChecking=no $SSH_USER@34.140.19.64 'cd /home/deb_admin/foclean-back && git pull origin main && sudo systemctl restart foclean-back'
+        ssh -o StrictHostKeyChecking=no $SSH_USER@34.78.211.230 'cd /home/deb_admin/foclean-back && git pull origin main && npm i && sudo systemctl restart foclean-back'
