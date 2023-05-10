@@ -14,9 +14,9 @@ const reqInfo = (req) => {
   console.log("secure", req.secure);
 };
 
-const errorHandler = (res, err) => {
-  console.error("---------- ERROR ----------", err);
-  res.status(500).send(err.toString());
+const errorHandler = (err) => {
+  console.error("--- ERROR ---\n", err);
+  // res.status(500).send(err?.toString());
 };
 
 module.exports = { reqInfo, errorHandler };

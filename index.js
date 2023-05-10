@@ -1,36 +1,50 @@
 require("dotenv").config();
-const fs = require("fs");
-const fsp = require("fs").promises;
 const express = require("express");
-const https = require("https");
-const FormData = require("form-data");
 const port = process.env.EXPRESS_PORT;
-const app = express();
-
-// const key = fs.readFileSync(__dirname + "/selfsigned.key", "utf8");
-// const cert = fs.readFileSync(__dirname + "/selfsigned.crt", "utf8");
-// const options = {
-//   key: key,
-//   cert: cert,
-// };
-
 const cors = require("cors");
 const formidableMiddleware = require("express-formidable");
-const { errorHandler } = require("./functions");
+const FormData = require("form-data");
 
-const axios = require("axios");
+const fs = require("fs");
+const fsp = require("fs").promises;
+
+const { errorHandler } = require("./functions");
 const { logRequest, logResponse, loggerHttp } = require("./logger");
 
+const axios = require("axios");
+
+const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(formidableMiddleware());
-app.use((req, res, next) => {
+app.use(async (req, res, next) => {
+  // await fsp.truncate("./logs/http.log"); // !@ only for dev
   logRequest(req);
   next();
 });
-axios.interceptors.request.use(logRequest);
-axios.interceptors.response.use(logResponse);
+axios.interceptors.request.use((req) => logRequest(req, false));
+axios.interceptors.response.use((res) => {
+  console.log(res.config.url + " response status", res.status);
+  logResponse(res, false);
+  return res;
+});
+
+app.get("/api/check", (req, res, next) => {
+  try {
+    res
+      .status(200)
+      .send(
+        `Artixel resender-logger is working ${new Date().toLocaleString(
+          "ru-RU"
+        )}`
+      );
+  } catch (err) {
+    next(err);
+  } finally {
+    next(res);
+  }
+});
 
 app.post("/api/cleaner/image", async (clientReq, clientRes, next) => {
   try {
@@ -40,6 +54,9 @@ app.post("/api/cleaner/image", async (clientReq, clientRes, next) => {
     inputData.append("file", fs.readFileSync(inputFile.path), inputFile.name);
 
     const aiReq = await axios(process.env.API_PRODUCTION_URL + "/api/predict", {
+      headers: {
+        "content-type": clientReq.headers["content-type"],
+      },
       method: "POST",
       data: inputData,
     });
@@ -52,7 +69,7 @@ app.post("/api/cleaner/image", async (clientReq, clientRes, next) => {
   }
 });
 
-app.post("/api/cleaner/mask", async (clientReq, clientRes) => {
+app.post("/api/cleaner/mask", async (clientReq, clientRes, next) => {
   try {
     const inputLink = clientReq.fields.image_file;
     const maskFile = clientReq.files.mask_file;
@@ -67,13 +84,18 @@ app.post("/api/cleaner/mask", async (clientReq, clientRes) => {
     const aiReq = await axios(
       process.env.API_PRODUCTION_URL + "/api/user_mask_predict",
       {
+        headers: {
+          "content-type": clientReq.headers["content-type"],
+        },
         method: "POST",
         data: inputData,
       }
     );
     clientRes.send(aiReq.data);
   } catch (err) {
-    errorHandler(clientRes, err);
+    next(err);
+  } finally {
+    next(clientRes);
   }
 });
 
@@ -83,23 +105,17 @@ app.post("/api/report/bug", async (clientReq, clientRes) => {
     await fsp.writeFile("./reports/" + name, await fsp.readFile(path));
     clientRes.status(200).json({ msg: "we have received your report" });
   } catch (err) {
-    errorHandler(clientRes, err);
+    next(err);
+  } finally {
+    next(clientRes);
   }
 });
 
 app.use((err, req, res, next) => {
-  console.log(err);
-  logResponse(res);
+  if (err) errorHandler(err);
+  logResponse(res, true);
 });
 
-// const server = https.createServer(options, (req, res) => {
-//   app(req, res);
-// });
-
-// server.listen(port, () => {
-//   console.log(`Artixel resender starting on port ${port}`);
-// });
-
 app.listen(port, () => {
-  console.log(`Artixel resender starting on port ${port}`);
+  console.log(`Artixel resender-logger starting on port ${port}`);
 });
