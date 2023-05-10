@@ -1,7 +1,7 @@
 const pino = require("pino");
 
 const fileTransport = pino.transport({
-  target: "pino-pretty",
+  target: "pino/file",
   options: { destination: `./logs/http.log` },
 });
 
