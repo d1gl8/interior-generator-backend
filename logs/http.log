@@ -1,0 +1,437 @@
+[14:26:38.435] [90mTRACE[39m (16839):
+    session: "pVSbFTNKUu4obV6oEwNSrZEz4iHF6eOge5dqtNGAo3grax9zY2KDY5Wr7Mc4nsf5"
+    direction: "Request Nuxt to Express"
+    method: "POST"
+    url: "/api/cleaner/image"
+    body: {
+      "file": {
+        "size": 12020,
+        "path": "/var/folders/3k/9tdztp9j37d0b8hgm4tryxm00000gn/T/upload_6bf44f6fb05e845dd70ab6e6ead34ca8",
+        "name": "1.webp",
+        "type": "image/webp",
+        "mtime": "2023-05-10T11:26:38.434Z"
+      }
+    }
+    headers: {
+      "host": "0.0.0.0:3010",
+      "connection": "keep-alive",
+      "content-length": "12200",
+      "pragma": "no-cache",
+      "cache-control": "no-cache",
+      "dnt": "1",
+      "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 YaBrowser/23.3.3.709 Yowser/2.5 Safari/537.36",
+      "session": "pVSbFTNKUu4obV6oEwNSrZEz4iHF6eOge5dqtNGAo3grax9zY2KDY5Wr7Mc4nsf5",
+      "content-type": "multipart/form-data; boundary=----WebKitFormBoundaryogGQ2XvAiOTSLshE",
+      "accept": "*/*",
+      "origin": "http://localhost:3000",
+      "referer": "http://localhost:3000/",
+      "accept-encoding": "gzip, deflate",
+      "accept-language": "ru,en;q=0.9"
+    }
+[14:26:38.439] [90mTRACE[39m (16839):
+    direction: "Request Express to AI"
+    method: "POST"
+    url: "http://34.79.165.171:6011/api/predict"
+    body: "stream from Nuxt request data"
+    headers: {
+      "Accept": "application/json, text/plain, */*",
+      "Content-Type": "multipart/form-data; boundary=----WebKitFormBoundaryogGQ2XvAiOTSLshE"
+    }
+[14:26:43.054] [90mTRACE[39m (16839):
+    direction: "Response AI to Express"
+    headers: {
+      "date": "Wed, 10 May 2023 11:26:38 GMT",
+      "server": "uvicorn",
+      "content-length": "17048",
+      "content-type": "application/json",
+      "connection": "close"
+    }
+    body: {
+      "input": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/input.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=0d9ac84be4a97dcf699d6c9490379574e230458a02fd775ab6d3bcc27e0c86c6ca7d1cf549efba6d205ca75ead097bd6a1ef737db9cb04482e5a7a15ab25796a25d0c7330ccab59acd3f624f10e3f4541eae2187e00cfc6af3b92efa6b697fc3ff94253b97ace9302841ff62ef0b32b0d877419cdcc6d558cb30e86186345dfc554c225d3ac27be838443f18ee8f55ea064dee99e4b145e8fa16fd42ead24cec2aeb94b15323878c29f81655bfbf0fe71c2fe4057389f2be1839f895fb03d15831c448690d8409e0a4121e42514c3b552b9df843321d8cb181e3c8a858ec760ed3cf220b4fe2acf8d69a2110a33b48ee945a2b18aec848bde68ec88482cdd43a",
+      "output": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/output.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=1cc05adef50239f386620113c4847b4124702d0b7aba72b28006b28e7d9108b8212e485e8cf950491baa0e8beb72d7804f476c222d9c28b0878d7a3eb14bdb2bc71ed0742ab24b97d2884bcdf12ea8dd3b8d5be53c5189416e41b3ab1cda0edf8a02bb730da171e82af5e7fe34b00e5d93fc661edf594a5a44665c7cc16e98c4a6673d319c4a6dbdef1a667cb397ff1aa6a6681af373e09abd0b8e271a8d42d862ac48e2cd1e00710b1b84d6270f2a4cbde0ad26bdc71e17078c6f1b29d49083e18722c5f14d03481105a7ba5ee18df99835e97326110244b15243f45f3521bf6de290c01ca7ad3232a3dfa76859684418337688fd75e7df30e263b668a7f603",
+      "width": 375,
+      "height": 250,
+      "crops": [
+        {
+          "label": "lamp",
+          "box": [
+            173,
+            131,
+            26,
+            15
+          ],
+          "index": 0,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=a418f07c494a62c10a209682c246b1b4351e57cdfda5c8098d3fb3474d641e8305d590a5fcd91bd3adb601aefd5f854d741c75ec25d96bc86e4cae5e826ca96677f7850c0cf21e7ad3b94841233742a8f19c1241330a84355761726adaeaea51303ac7c252f60b561d4b0fb09b4a4c5ca485d33b9a6a57184275064e552c520f0d43dac56e570b1fc0cb08a0830b14a1fc9a07af5afff4f92e045a1ebf16eecfa28943bc81e94145e052fd83158a8afce0b2f4dc0c2dd454e1c739bd008cd48b3410896e28a3cd4a1be576eaa359391ecd84480217cf37ec426dcd3790b66efbc4ac05f21ef48e90c7159988666d9c16d05f01eeb6fd449c6602de07cbcbf36f",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_0.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=61ef3e55b334be4eb8ad50c951e3e91b8c18c028a64d76667488f744287636a2c8b0b48cc8083c0b6553a69f23b3d14fc7593da2ba3dfa00573b19562315ad814e92e691c59aa20dee6a22a337e85195aac752087cd6f3e932278f05b572dd73cd7da4b07c0610e217ca9068b1ccc4dbe3e3a3415f31eb89a3f90ee0bc2a8d1a4f1442cbc82f7129468e5402ced33b18b1867cce1850b209cfe15740236e546bf4d2dd890036c7da0e03f67bb02139c5c1b82d1986ef68ecd527442bbc3b877e2893e8471da7716815a3d644cb2e576328a8e5f13ebf44353ad491a9d569a8c3bdc118742f6a3c4a265daf3bba5b84bd7b152447a205a1fb5fa8cd77522cde0e",
+          "intersections": [],
+          "contour": [
+            [
+              25,
+              0
+            ],
+            [
+              25,
+              14
+            ],
+            [
+              0,
+              14
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "lamp",
+          "box": [
+            32,
+            61,
+            35,
+            53
+          ],
+          "index": 1,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=7f4f1e2abe29840798d844bcec1cf92286dbfcd5c482b8abb1c174d642e8fd78fbe26b375ba4d1ea9b756c718895d470d39d3b31b4a9009fc467dfa37dcba872b1b911cbed92e23124b2be0ac94b7216c650b444219f2ac0b4e6f285563ff1a80a5c987237ce7d36bcb377ab49e5aa3731b723ca8b5c00265e17d10db808bbfb0fbe2207d575170302b011db0f7c9a1cf5c1c8452f6612d04ff7fed5dc92ea5161bff3f97584eb70fc90ee2f3e09199326a4f6c33bf233b5115eaf07d41c4eb2bbc4a00ad36c03fdcbb6038cbefdbbf4d4f0499feb0708b22de621cd36befb29dcded384819fbc0e9f1ccea1f1220e854dbf0dc75163d9d3d8f7ce6a6bb0c713",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_1.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=625ee1e45797d93d3b877b7e1921a57ce77021fd4a3a03a4fec3ee2a287ed4555d2a2a14b9d01039a056ce5c5c9d0c54af3d39e95b4e0bf1c436c7742f1eef069b4f8653d1cb2deac0ec0539e6432e3e8cc1612316fa9ca84268786af6a113edd39623ceae88d6465f9246605d21bc7add8b9bd1b6acecccda7b9e6b23e6dac17f70be86eebdcbd960c823c404c4d09bd2b0b0d9f0d3c74b09799ac9c949b10ff879ab1c34bf63b4a935a290f00366cc57b6401eae0b68bd9e074347e6be7a890deb559e56036812bded2775475c27263400272747039ccfcab285f4bc53e583ecaceb6bf144bc82287ccfa0dc1342e69ac7a4ffc775cc2db46b1ed5f084f255",
+          "intersections": [],
+          "contour": [
+            [
+              6,
+              40
+            ],
+            [
+              7,
+              41
+            ],
+            [
+              9,
+              46
+            ],
+            [
+              9,
+              50
+            ],
+            [
+              8,
+              51
+            ],
+            [
+              0,
+              51
+            ],
+            [
+              0,
+              41
+            ],
+            [
+              1,
+              40
+            ]
+          ]
+        },
+        {
+          "label": "television",
+          "box": [
+            216,
+            106,
+            50,
+            39
+          ],
+          "index": 2,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=196c070f51cf36308d7aba6b46ab64c7b56f91212c50b56c6c1c6724f6527a11b56219b5f35befc9585b9996ee31f929baeda9035c019a9c48f43a01324cca18e09a9f4779610f2794fefc9508314fc5a97ce11ed3e45e40dc5a164108b8e82850268444674fb69e4e64f63ef2e737003623dbaee534d3aa32d4a9715a9b1b6b835c19d5e6e44d2e69a3014a55b63868b057fbfb45989a311c2917d1ff6878b111b990efd2af5a0b28aac1556edebfa6fbffebffc63e1e2b50c22016718e90563bd56f756a154dffb7e98603854a596176afd455009a74008389787119d6cb49ac9bcdbaa6a4d178d1b1e0817635d9522c776717935486ba8ce6b3898fa4d9bf",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_2.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112641Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=062e87219ea8089fce4dd882ca24c7e522cc14245c78dba8b16d7667f1e1892eee6c72d09be12dc821ab79f9f8ded9d0cb502cd96f370c9e9bafee695b75c96d845b578a6943e9cd015d9c042176477d54d8a4a26734e5d56f5020caf33a5146f50f20564f21d6bfb6e8401f555088a610d7c4265da159d63d924f49e231cd6cc1edb06e7b8cfc51893392eb267a1dabf3d78bfd6400f9cfc35e201c675e86ceca7e53945083012326612ef4af1bd16547553e13415c2f7fedc47c7ac9c9c18d8e6c72c177c554b72812186a15bf257f236a678eb55251b504e7220830e92df53315d5ccf91777ab74ba25ed9c4b3e95a8c5d77be2a0766726e0b0a4c38f2756",
+          "intersections": [],
+          "contour": [
+            [
+              49,
+              0
+            ],
+            [
+              49,
+              38
+            ],
+            [
+              5,
+              38
+            ],
+            [
+              0,
+              37
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "chair",
+          "box": [
+            75,
+            136,
+            18,
+            25
+          ],
+          "index": 3,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_3.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=1216135c7cb95ea8a51d93e0b6396db68992376fdb79c6ce997684aa19b85613755e85b2dfa81e1916a2e82b2c047d4eec290627c729b974f35b7fd7f28cc8c48dd685f1d982632d28c5c6ec8634a3bb6d103d1bfe7745e237b736143307cedbc7e9b0f126f63c4dde726f1bcf1bb063c119ef2168fcff60dd4fea4dfd408f320f5d7f33f54c6a5b959e5c6f8dc70ce4650670087030149f6962dbf6303b23b8fca621d38098e2aaf3189aeb8754c64973ffa3eaa77d7584db4609fadac73d4f450f0e1ceaa9d37c762c60bd95a827b7ee2db07a47b8943bb0781d7db15d01b4da9c7ce4aef0dbadbaf08d98ec0e0df155e8236eb75ca89675d037ffb147d117",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_3.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=62d5f95a18e1fee16f14b182bc1de9ee2f2cd8b723f72a665f2f526fccc27268ce3db6c69ff565ebc5063ef0a4ee15b558804be79d7064983992b2a61a4a2bc22c613d6097f127b732a2f3b086672f942acce6ab370eb70335d9ec1c2085aa959cbbb74202d5fbe92b0629ceedcf0cf4d50c990dc7757db0c1cda41a6ea9b25235885cafc6fce25a7b348f0a67630bae676f132bbcd3423cd6cd298720ef16dc6641d3b06135a4c07739bdcd9f38b497869badd0e44585152baa17298daefdaa78a56eb19dd4e532ddbd3f009225d01ab409ce70c3b4dbc6330b565b98e2aa62a08f3d81dc45f0db321e9773195cf735a668454546b6283156ba6276693708db",
+          "intersections": [],
+          "contour": [
+            [
+              17,
+              0
+            ],
+            [
+              17,
+              24
+            ],
+            [
+              0,
+              24
+            ],
+            [
+              0,
+              2
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "chair",
+          "box": [
+            48,
+            135,
+            21,
+            18
+          ],
+          "index": 4,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_4.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=5faa4e00271db570d67665da573d8f23bd2c736836e557bb5b61da4459db9d4a12bd5e97b3da1c96f2d8ae29fc71fe2f33923e240791b10038f2a480807d0b9a7821b89ef8319d00ad5a442db74c5d5a143a0ebdf135104c1c4228c41bea5fcfece0bbd428b4de527a4acf522ae7de6f66be22acc0d552e05cf0eb2276a85ca2cedaa1898302a4ddff3cc5ed9f49b8b9fc5e9704f3c7cff7e61c59a5fdb6d59feb93a70dbf32a812c71924984c0da799d3cb338a67f0ff0c4047235b11102ae41372b08541f89a67cd939e01aa32b30dfe01dd7148d1b01fc0d44f683a63bbbfdb5274980715fc9c6934ec25d3d355be3336415a572cb68d8bb1d6dc1a469f81",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_4.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=77218b63fc15b11c77e8a0d5c10ac583453ce9aa99463e401e41fc334cac4e3f498ba56bb06d1f7d914c8d76b308ff5ff307668a6d5239a1d287ce95a079bcdaf482ae9f6fe9cc1f02a49c2d06e6f018c2b82653884998cce389b5504b5ebd8766d06618845868d9c43328dbf4d269d716b582bcf0f7e0f517eed058889179b06f6c2b3d5583970e71ab3102bc9aa1df3c63098522f833678264afcfe17c4dfc36a594da29d21c124e12d06bb386300b98f3c4e974dcb55d358bf7e161aae87a2089474954224a846cfa5f32dc920e406a726cfc86d86eb5f62346d76b0d5f8f82b7075d6b2d8ede7a7fb9872d5c4d7468fd000fc8bd50ead51694954df953a2",
+          "intersections": [
+            [
+              6,
+              0
+            ]
+          ],
+          "contour": [
+            [
+              19,
+              0
+            ],
+            [
+              20,
+              1
+            ],
+            [
+              20,
+              17
+            ],
+            [
+              0,
+              17
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "sofa",
+          "box": [
+            103,
+            150,
+            190,
+            100
+          ],
+          "index": 5,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_5.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=9cb1339273287d63613982605e1dcbfed294437856225e92b2ee0cd3aabf63d1d0a61973f43e44260c38e2c51c55744fa21b455e1680ca388c7c107bd578bb307fe561252411227d4eb7adf672b768631f4b86806663ca69f5b425d281622424fada9d491e09be2f0ccd49015826c466466f81c35242351e75c9872928b6e5adbdaa0ae68fa60170d600792e2423f7d9368ae7e8e2690d5b30b3af95a3eb16ed414cdb6f3002a97ce2887bb4a4359dee96f7499121a98373d5bddb3051f82c868ecfd97a56bf1d328abe4a45e9d2c9ab9f5bd49281793eaac84f1d40bdb5c121b2e18c93ce3a675b978e1ceb4870370a12e9ead514542969af7076e6c9997fb4",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_5.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=247d4813965444fea6bfe0a695e576116ec265e321c11a4684b5a7ec49df0851efd14a52f4159bee8a46fe36f950408104c370ffa13722c6dbf0080f721c3cc5c7ae71216a1257b88ccd6796ac8eb49cb4634c15cc58b7e696b4f88b83390423405bfa0b19aeeb4d2daa1ee234ee0ded0572c8d69fe9968a24d94e01aae98e0a6dc32ffd9bdbb2bf3b8481756a79c4ff2ebf2a5f04e330e4f303a153bc46fefea8cab6326a528b60432131faa4136704297e996ecc07c46556426d931d4c754377a030c685bff12a533e4a60452a03bb0a8a34240ec5bcf96dd5eafcf5fa30087181db37946a12e82ee8a947425cf97b131a95264974c4f24c3995a6c142b1d6",
+          "intersections": [],
+          "contour": [
+            [
+              32,
+              0
+            ],
+            [
+              82,
+              5
+            ],
+            [
+              170,
+              26
+            ],
+            [
+              174,
+              27
+            ],
+            [
+              181,
+              29
+            ],
+            [
+              187,
+              31
+            ],
+            [
+              189,
+              32
+            ],
+            [
+              189,
+              59
+            ],
+            [
+              187,
+              61
+            ],
+            [
+              111,
+              99
+            ],
+            [
+              77,
+              99
+            ],
+            [
+              65,
+              90
+            ],
+            [
+              56,
+              83
+            ],
+            [
+              50,
+              78
+            ],
+            [
+              0,
+              32
+            ],
+            [
+              0,
+              11
+            ],
+            [
+              1,
+              5
+            ],
+            [
+              4,
+              1
+            ],
+            [
+              5,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "desk",
+          "box": [
+            0,
+            146,
+            98,
+            104
+          ],
+          "index": 6,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_6.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=9d8fcb57f115edb33c0a5d75a004bb026762d888eb48ab84d8373b36e9989c4e5d8296a71313a569c580f09e14dc07ea5e526b6fd9768c52081784381f55366e3ac045919e8def1651a927885f18e8b238c6a41f50333efbce162922321ef9fe6e2fc0d6d7cc23911eb2ed872bc3661d587d40d4ec19ab557338cf5dd197f6e5d5a708466a4e27d402eb865c0cc985538eb0b312b6e4844f0c5e2019e1af82503eb88a07b24545d1bc5ffd341bf7823b593e346b093fbab5fa3cb72ecdae4da6b5dee106366ee16be06cbf9e2abe7f9f79fb0e939c7a0073ac20ac20320cd273a872ec22ad786897d97f80d4b7ae136e19426ffaad891791b8757f09558c9574",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_6.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=a97d2c27e61a8eae681164986f793ce8dda220db0cea7dd83b61345a538b320be8784d3504efbafbd29e08ff3109fdea7514fc05d6221a774b931cbb8dbcd7f403f49ea29d0f2c2bcf9487e66cb7a4bafed64a4ae7ab93ec57d41df8155c00c6bc3180f1e85a5c82ad8d6b838a324e19038369c6ccf87fa1e738878b8600a3b526a4818f6504c855352b16183d8bcb94188ba4ccb62f32c6a963275c2f0a5bc32447059fe35e891943b16b0cfeedcba96d025b333fc78e7cea8e2f0a6b34665f99517959e6415d84ffe20a1b7d25bff8009e7592a600af7df0628f15390a5c958b70454b22a313dbf9aeda88b3d46bcd5ec38fe78feee01a74151b190b5d6093",
+          "intersections": [
+            [
+              4,
+              1
+            ]
+          ],
+          "contour": [
+            [
+              61,
+              0
+            ],
+            [
+              63,
+              1
+            ],
+            [
+              70,
+              6
+            ],
+            [
+              96,
+              27
+            ],
+            [
+              97,
+              28
+            ],
+            [
+              97,
+              54
+            ],
+            [
+              77,
+              90
+            ],
+            [
+              67,
+              103
+            ],
+            [
+              0,
+              103
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "label": "column",
+          "box": [
+            364,
+            0,
+            11,
+            250
+          ],
+          "index": 7,
+          "rgb": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgb_7.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=893e07dedf44a417da0b0cc484eb06b874631cd494ba210234e225116db26a3cb34c803301a53cba516189eb0b366a85088ac87e1ddefa9bceee877dbc34f9a2a3681b088c8023b3d1eae3a71109e103c43063dadab887a29efb3753b9b61eb3ba97e49c4feaa18910d85fd1f9f98c60dddbff4af434e90b8644af7b73232f9c3ccd8ecc121379161dbbff1260affd4d95b6201b5acc3474788de2755691da6fd94d89bd2fed387b2fc3d43fa2f90ac5e5dcb7a23172699d93b4f5b22cb63de99c752ea67b9bfe54421842b0bf35260887c316ff55d12e39ffb64c6548a30b76a82a9103a3d06f709ccb3a914afaf552de6fe00ca86ccb450905a4ad39fd8ca9",
+          "rgba": "https://storage.googleapis.com/workflow-images-164391164398-dev/23-05-10_674c69a57c3647ac859f3f6f020610f9/rgba_7.png?X-Goog-Algorithm=GOOG4-RSA-SHA256&X-Goog-Credential=164391164398-compute%40developer.gserviceaccount.com%2F20230510%2Fauto%2Fstorage%2Fgoog4_request&X-Goog-Date=20230510T112642Z&X-Goog-Expires=900&X-Goog-SignedHeaders=host&X-Goog-Signature=98bf3e3dc6dc2d7969befb8164e2cfe23517cc665d4cd526057db8d435b7916b8f06160e42a4ce5eff4a176820e6dde808fc02cdc4dabaae158b11ac016257a90b51189322858d4eb0dc5801eeeeafb5483bd2e79188ecb0380c7fc699e04ae88ae0bd2c3ed7ed80b0bd633d5ec213371bfe0de3c047e7c76681c346df07aa0db15dd71f810f87133e58a335aa1867c5aa9ce0cc6295f28067db294bc6178e73ded196bd83722a3843a89b6b43f082a33344ef6d11e088e1cb7f25c7595bd0676f3c747e4023d73e12d57d7db17251f920c73e100f1ce3fafddf24fd6adf1e638b626af0bc05da4fff1e6dd400acfda0abb125d4a7415933a919c0f0fa93ef66",
+          "intersections": [],
+          "contour": [
+            [
+              10,
+              0
+            ],
+            [
+              10,
+              249
+            ],
+            [
+              0,
+              249
+            ],
+            [
+              0,
+              0
+            ]
+          ]
+        }
+      ],
+      "times": {
+        "Depth": "0.00",
+        "OneFormer": "1.59",
+        "MainLaMA": "0.00",
+        "Intersections": "0.00",
+        "CropsLaMA": "0.62"
+      }
+    }
+[14:26:43.063] [90mTRACE[39m (16839):
+    direction: "Response Express to Nuxt"
+    status: 200
+    body: "stream from AI response data"
