@@ -36,33 +36,37 @@ const getMultipartData = (fields, files) => {
 };
 
 const logRequest = async (request, express = true) => {
-  // console.log(request);
-  const direction = express
-    ? "Request Nuxt to Express"
-    : "Request Express to AI";
+  try {
+    // console.log(request);
+    const direction = express
+      ? "Request Nuxt to Express"
+      : "Request Express to AI";
 
-  const isMultipart =
-    request.headers["content-type"]?.includes("multipart") ||
-    request.headers["Content-Type"]?.includes("multipart");
+    const isMultipart =
+      request.headers["content-type"]?.includes("multipart") ||
+      request.headers["Content-Type"]?.includes("multipart");
 
-  let log = {
-    session: request.headers.session,
-    direction,
-    method: request.method?.toUpperCase(),
-    url: request.url,
-    body: (() => {
-      if (!isMultipart) return request.data;
-      else {
-        return express
-          ? getMultipartData(request.fields, request.files)
-          : "stream from Nuxt request data";
-      }
-    })(),
-    headers: request.headers,
-  };
-  logger.trace(log);
-  // logger.trace(request);
-  return request;
+    let log = {
+      session: request.headers.session,
+      direction,
+      method: request.method?.toUpperCase(),
+      url: request.url,
+      body: (() => {
+        if (!isMultipart) return request.data;
+        else {
+          return express
+            ? getMultipartData(request.fields, request.files)
+            : "stream from Nuxt request data";
+        }
+      })(),
+      headers: request.headers,
+    };
+    logger.trace(log);
+    // logger.trace(request);
+    return request;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 const logResponse = (response, express = true) => {
