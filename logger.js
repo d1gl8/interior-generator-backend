@@ -1,10 +1,16 @@
 const pino = require("pino");
+// const pretty = require("pino-pretty");
+const logrotate = require("logrotate-stream");
 
-const fileTransport = pino.transport({
-  target: "pino/file",
-  options: { destination: `./logs/http.log` },
+const logrotateStream = logrotate({
+  file: "/var/log/foclean-back/http.log",
+  size: "1m",
+  keep: 3,
+  compress: true,
 });
-
+// const prettyStream = pretty({
+//   destination: logrotateStream,
+// });
 const logger = pino(
   {
     level: "trace",
@@ -15,9 +21,17 @@ const logger = pino(
       timestamp: pino.stdTimeFunctions.isoTime,
     },
   },
-  fileTransport
+  logrotateStream
 );
 
+const getExpressFullUrl = (req) => {
+  return `${req.protocol}://${req.get("host") + req.originalUrl}`;
+};
+const isMultipart = (headers) => {
+  const contentTypeHeader = headers["content-type"] || headers["Content-Type"];
+  if (!contentTypeHeader) return false;
+  else return contentTypeHeader.includes("multipart");
+};
 const getMultipartData = (fields, files) => {
   let multipartData = {};
 
@@ -36,51 +50,85 @@ const getMultipartData = (fields, files) => {
 };
 
 const logRequest = async (request, express = true) => {
-  try {
-    // console.log(request);
-    const direction = express
-      ? "Request Nuxt to Express"
-      : "Request Express to AI";
+  let session, direction, method, url, headers, body;
+  session = request.headers.session;
+  method = request.method.toUpperCase();
+  url = request.url;
+  headers = request.headers;
 
-    const isMultipart =
-      request.headers["content-type"]?.includes("multipart") ||
-      request.headers["Content-Type"]?.includes("multipart");
-
-    let log = {
-      session: request.headers.session,
-      direction,
-      method: request.method?.toUpperCase(),
-      url: request.url,
-      body: (() => {
-        if (!isMultipart) return request.data;
-        else {
-          return express
-            ? getMultipartData(request.fields, request.files)
-            : "stream from Nuxt request data";
-        }
-      })(),
-      headers: request.headers,
-    };
-    logger.trace(log);
-    // logger.trace(request);
-    return request;
-  } catch (err) {
-    console.log(err);
+  if (express) {
+    direction = "Nuxt -> Express";
+    url = getExpressFullUrl(request);
+    body = getMultipartData(request.fields, request.files);
+  } else {
+    direction = "Express -> AI";
+    body = "restream Nuxt request data";
   }
+
+  if (!isMultipart(headers)) body = request.data;
+
+  console.log(direction);
+  console.log(` ${method} REQUEST ${url}\n`);
+
+  let log = {
+    session,
+    type: "REQUEST",
+    direction,
+    method,
+    url,
+    headers,
+    body,
+    // time
+  };
+  logger.trace(log);
+  // logger.trace(request);
+  return request;
 };
 
 const logResponse = (response, express = true) => {
-  // console.log(response);
-  const direction = express
-    ? "Response Express to Nuxt"
-    : "Response AI to Express";
+  let session, direction, method, url, status, headers, body;
+  // express && console.log(response.req.body);
+  if (express) {
+    session = response.req.session;
+    direction = "Express -> Nuxt";
+    method = response.req.method.toUpperCase();
+    status = response.statusCode;
+    url = getExpressFullUrl(response.req);
+    headers = response.getHeaders();
+    body = "restream AI response data";
+  } else {
+    session = response.request.getHeaders().session;
+    direction = "AI -> Express";
+    method = response.config.method.toUpperCase();
+    status = response.status;
+    url = response.config.url;
+    headers = response.headers;
+    body = response.data;
+  }
+  if (!isMultipart(headers)) {
+    if (express) body = response.data;
+    else body = response.data;
+  }
+  console.log(direction);
+  console.log(` ${method} RESPONSE ${status} ${url}\n`);
+
+  if (!isMultipart(headers)) {
+    if (express) body = response.req.resBody;
+    else body = response.data;
+  }
+
   let log = {
-    // session: response.headers.session,
+    session,
+    type: "RESPONSE",
     direction,
-    status: response.statusCode,
-    headers: response.headers,
-    body: express ? "stream from AI response data" : response.data,
+    method,
+    url,
+    status,
+    headers,
+    body,
+    // time
   };
+
   logger.trace(log);
   // logger.trace(response);
   return response;
