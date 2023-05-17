@@ -67,7 +67,7 @@ const logRequest = (request, express = true) => {
     body = getMultipartData(request.fields, request.files);
   } else {
     direction = "Express -> AI";
-    ip = networkInterfaces().en0[1].address;
+    ip = "networkInterfaces().en0[1].address";
     url = request.baseURL + request.url;
     body = "restream Nuxt request data";
   }
