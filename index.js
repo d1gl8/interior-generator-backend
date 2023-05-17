@@ -1,6 +1,11 @@
 require("dotenv").config();
+const isDev = process.env.NODE_ENV === "dev";
+module.exports = { isDev };
+
 const fs = require("fs");
 const fsp = require("fs").promises;
+const crypto = require("crypto");
+
 const express = require("express");
 const port = process.env.EXPRESS_PORT;
 const cors = require("cors");
@@ -8,6 +13,8 @@ const formidableMiddleware = require("express-formidable");
 
 const axios = require("axios");
 const FormData = require("form-data");
+axios.defaults.baseURL = process.env.API_PRODUCTION_URL + "/api";
+
 const { logRequest, logResponse } = require("./logger");
 
 const app = express();
@@ -15,13 +22,20 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(formidableMiddleware());
-app.use(async (req, res, next) => {
-  // await fsp.truncate("./logs/http.log"); // !@ only for dev
 
+let hash, session, start;
+app.use(async (req, res, next) => {
+  isDev && (await fsp.truncate("./logs/http.log")); // only for dev
+  session = req.headers.session;
+  start = req.headers["request-start"];
+  hash = crypto.randomBytes(8).toString("hex");
+
+  req.metadata = { hash, session, start };
   logRequest(req);
   next();
 });
 axios.interceptors.request.use((req) => {
+  req.metadata = { hash, session, start: Date.now().toString() };
   logRequest(req, false);
   return req;
 });
@@ -30,7 +44,7 @@ axios.interceptors.response.use((res) => {
   return res;
 });
 
-app.get("/api/check", (req, res, next) => {
+app.get("/api/check", async (req, res, next) => {
   res
     .status(200)
     .send(
@@ -45,7 +59,7 @@ app.post("/api/cleaner/image", async (clientReq, clientRes, next) => {
   let inputData = new FormData();
   inputData.append("file", fs.readFileSync(inputFile.path), inputFile.name);
 
-  const aiReq = await axios(process.env.API_PRODUCTION_URL + "/api/predict", {
+  const aiReq = await axios("/predict", {
     headers: {
       session: clientReq.headers.session,
       "content-type": clientReq.headers["content-type"],
@@ -76,7 +90,6 @@ app.post("/api/cleaner/mask", async (clientReq, clientRes, next) => {
     process.env.API_PRODUCTION_URL + "/api/user_mask_predict",
     {
       headers: {
-        session: clientReq.headers.session,
         "content-type": clientReq.headers["content-type"],
       },
       method: "POST",

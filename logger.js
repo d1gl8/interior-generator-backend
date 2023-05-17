@@ -1,27 +1,32 @@
+const { isDev } = require("./index");
+const { networkInterfaces } = require("os");
 const pino = require("pino");
-// const pretty = require("pino-pretty");
+const pretty = require("pino-pretty");
 const logrotate = require("logrotate-stream");
+const file = isDev ? "./logs/http.log" : "/var/log/foclean-back/http.log";
 
 const logrotateStream = logrotate({
-  file: "/var/log/foclean-back/http.log",
-  size: "1m",
+  file,
+  size: "100k",
   keep: 3,
   compress: true,
 });
-// const prettyStream = pretty({
-//   destination: logrotateStream,
-// });
+const prettyStream = pretty({
+  destination: logrotateStream,
+});
+const pinoTransport = isDev ? prettyStream : logrotateStream;
+
 const logger = pino(
   {
     level: "trace",
     formatters: {
       level: (label) => {
-        return { level: label.toUpperCase() };
+        return { context: "http" };
       },
       timestamp: pino.stdTimeFunctions.isoTime,
     },
   },
-  logrotateStream
+  pinoTransport
 );
 
 const getExpressFullUrl = (req) => {
@@ -49,68 +54,79 @@ const getMultipartData = (fields, files) => {
   return multipartData;
 };
 
-const logRequest = async (request, express = true) => {
-  let session, direction, method, url, headers, body;
-  session = request.headers.session;
+const logRequest = (request, express = true) => {
+  let direction, ip, method, url, headers, body;
+  const { hash, session } = request.metadata;
   method = request.method.toUpperCase();
-  url = request.url;
   headers = request.headers;
 
   if (express) {
     direction = "Nuxt -> Express";
+    ip = request.socket.remoteAddress;
     url = getExpressFullUrl(request);
     body = getMultipartData(request.fields, request.files);
   } else {
     direction = "Express -> AI";
+    ip = networkInterfaces().en0[1].address;
+    url = request.baseURL + request.url;
     body = "restream Nuxt request data";
   }
 
   if (!isMultipart(headers)) body = request.data;
 
-  console.log(direction);
-  console.log(` ${method} REQUEST ${url}\n`);
+  console.log(" " + direction);
+  console.log(`  ${method} REQUEST ${url}\n`);
 
   let log = {
+    hash,
     session,
-    type: "REQUEST",
     direction,
+    ip,
+    type: "REQUEST",
     method,
     url,
     headers,
     body,
-    // time
   };
   logger.trace(log);
-  // logger.trace(request);
   return request;
 };
 
-const logResponse = (response, express = true) => {
-  let session, direction, method, url, status, headers, body;
-  // express && console.log(response.req.body);
+const logResponse = async (response, express = true) => {
+  let direction, method, url, status, headers, body, responseTime;
+  const { hash, session, start } = express
+    ? response.req.metadata
+    : response.config.metadata;
+  responseTime = Date.now() - start;
+  const getResponseFinish = () => {
+    return new Promise((res, rej) => {
+      response.once("finish", () => {
+        responseTime = Date.now() - start;
+        res();
+      });
+    });
+  };
+
   if (express) {
-    session = response.req.session;
     direction = "Express -> Nuxt";
     method = response.req.method.toUpperCase();
     status = response.statusCode;
     url = getExpressFullUrl(response.req);
     headers = response.getHeaders();
     body = "restream AI response data";
+    await getResponseFinish();
   } else {
-    session = response.request.getHeaders().session;
     direction = "AI -> Express";
     method = response.config.method.toUpperCase();
     status = response.status;
-    url = response.config.url;
+    url = response.config.baseURL + response.config.url;
     headers = response.headers;
     body = response.data;
   }
-  if (!isMultipart(headers)) {
-    if (express) body = response.data;
-    else body = response.data;
-  }
-  console.log(direction);
-  console.log(` ${method} RESPONSE ${status} ${url}\n`);
+
+  console.log(" " + direction);
+  console.log(`  ${method} RESPONSE ${status} ${url}`);
+  console.log(`  response time ${responseTime / 1000} sec\n`);
 
   if (!isMultipart(headers)) {
     if (express) body = response.req.resBody;
@@ -118,19 +134,19 @@ const logResponse = (response, express = true) => {
   }
 
   let log = {
+    hash,
     session,
-    type: "RESPONSE",
     direction,
+    type: "RESPONSE",
     method,
     url,
     status,
     headers,
     body,
-    // time
+    responseTime,
   };
 
   logger.trace(log);
-  // logger.trace(response);
   return response;
 };
 

@@ -1,4 +1,7 @@
 {
+  "scripts": {
+    "dev": "NODE_ENV=dev npx nodemon ."
+  },
   "dependencies": {
     "axios": "^1.4.0",
     "cors": "^2.8.5",
