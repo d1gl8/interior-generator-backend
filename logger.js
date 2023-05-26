@@ -3,12 +3,17 @@ const { networkInterfaces } = require("os");
 const pino = require("pino");
 const pretty = require("pino-pretty");
 const logrotate = require("logrotate-stream");
-const file = isDev ? "./logs/http.log" : "/var/log/foclean-back/http.log";
+const {
+  getExpressFullUrl,
+  isMultipart,
+  getMultipartData,
+} = require("./handlers/serialize");
 
+const file = isDev ? "./logs/http.log" : "/var/log/foclean-back/http.log";
 const logrotateStream = logrotate({
   file,
-  size: "100k",
-  keep: 3,
+  size: "1m",
+  keep: 5,
   compress: true,
 });
 const prettyStream = pretty({
@@ -29,31 +34,6 @@ const logger = pino(
   pinoTransport
 );
 
-const getExpressFullUrl = (req) => {
-  return `${req.protocol}://${req.get("host") + req.originalUrl}`;
-};
-const isMultipart = (headers) => {
-  const contentTypeHeader = headers["content-type"] || headers["Content-Type"];
-  if (!contentTypeHeader) return false;
-  else return contentTypeHeader.includes("multipart");
-};
-const getMultipartData = (fields, files) => {
-  let multipartData = {};
-
-  if (Object.keys(fields).length !== 0) {
-    Object.entries(fields).forEach(([key, value]) => {
-      multipartData[key] = value;
-    });
-  }
-  if (Object.keys(files).length !== 0) {
-    Object.entries(files).forEach(([key, value]) => {
-      multipartData[key] = value;
-    });
-  }
-
-  return multipartData;
-};
-
 const logRequest = (request, express = true) => {
   let direction, ip, method, url, headers, body;
   const { hash, session } = request.metadata;
@@ -67,7 +47,7 @@ const logRequest = (request, express = true) => {
     body = getMultipartData(request.fields, request.files);
   } else {
     direction = "Express -> AI";
-    ip = "networkInterfaces().en0[1].address";
+    ip = networkInterfaces().en0[1].address;
     url = request.baseURL + request.url;
     body = "restream Nuxt request data";
   }

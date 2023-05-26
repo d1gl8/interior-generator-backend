@@ -2,18 +2,16 @@ require("dotenv").config();
 const isDev = process.env.NODE_ENV === "dev";
 module.exports = { isDev };
 
-const fs = require("fs");
 const fsp = require("fs").promises;
 const crypto = require("crypto");
 
 const express = require("express");
-const port = process.env.EXPRESS_PORT;
 const cors = require("cors");
 const formidableMiddleware = require("express-formidable");
-
-const axios = require("axios");
-const FormData = require("form-data");
-axios.defaults.baseURL = process.env.API_PRODUCTION_URL + "/api";
+const asyncHandler = require("express-async-handler");
+const port = process.env.EXPRESS_PORT;
+const router = require("./router");
+const { outFetch } = require("./plugins/axios");
 
 const { logRequest, logResponse } = require("./logger");
 
@@ -24,108 +22,55 @@ app.use(express.urlencoded({ extended: true }));
 app.use(formidableMiddleware());
 
 let hash, session, start;
-app.use(async (req, res, next) => {
-  isDev && (await fsp.truncate("./logs/http.log")); // only for dev
-  session = req.headers.session;
-  start = req.headers["request-start"];
-  hash = crypto.randomBytes(8).toString("hex");
+app.use(
+  asyncHandler(async (req, res, next) => {
+    isDev && (await fsp.truncate("./logs/http.log")); // only for dev
+    session = req.headers.session;
+    start = req.headers["request-start"];
+    hash = crypto.randomBytes(8).toString("hex");
 
-  req.metadata = { hash, session, start };
-  logRequest(req);
-  next();
-});
-axios.interceptors.request.use((req) => {
-  req.metadata = { hash, session, start: Date.now().toString() };
-  logRequest(req, false);
-  return req;
-});
-axios.interceptors.response.use((res) => {
-  logResponse(res, false);
-  return res;
-});
-
-app.get("/api/check", async (req, res, next) => {
-  res
-    .status(200)
-    .send(
-      `Artixel express server is working ${new Date().toLocaleString("ru-RU")}`
-    );
-});
-
-app.post("/api/cleaner/image", async (clientReq, clientRes, next) => {
-  // try {
-  const inputFile = clientReq.files.file;
-
-  let inputData = new FormData();
-  inputData.append("file", fs.readFileSync(inputFile.path), inputFile.name);
-
-  const aiReq = await axios("/predict", {
-    headers: {
-      session: clientReq.headers.session,
-      "content-type": clientReq.headers["content-type"],
-    },
-    method: "POST",
-    data: inputData,
-  });
-
-  clientRes.status(200).json(aiReq.data);
-  next(clientRes);
-  // }
-  // catch (err) {
-  //   throw new Error(err.toString());
-  // }
-  //   finally {
-  // }
-});
-
-app.post("/api/cleaner/mask", async (clientReq, clientRes, next) => {
-  // try {
-  const inputLink = clientReq.fields.image_file;
-  const maskFile = clientReq.files.mask_file;
-  let inputData = new FormData();
-  inputData.append("image_string_bytes", inputLink);
-  inputData.append("mask_file", fs.readFileSync(maskFile.path), maskFile.name);
-
-  const aiReq = await axios(
-    process.env.API_PRODUCTION_URL + "/api/user_mask_predict",
-    {
-      headers: {
-        "content-type": clientReq.headers["content-type"],
-      },
-      method: "POST",
-      data: inputData,
+    if (req.statusCode !== 200) {
+      console.log("express catch");
+      console.log(req);
+      // console.log(res   + "\n");
+      throw new Error("express catch");
     }
-  );
-  clientRes.send(aiReq.data);
-  next(clientRes);
-  // } catch (err) {
-  //   next(err);
-  // } finally {
-  // }
-});
+    req.metadata = { hash, session, start };
+    logRequest(req);
+  })
+);
+outFetch.interceptors.request.use(
+  (req) => {
+    req.metadata = { hash, session, start: Date.now().toString() };
+    logRequest(req, false);
+    return req;
+  },
+  (err) => {
+    console.log("error axios request");
+  }
+);
+outFetch.interceptors.response.use(
+  (res) => {
+    logResponse(res, false);
+    return res;
+  },
+  (err) => {
+    console.log("error axios response", err);
+    // console.log("error axios response", err);
+    throw new Error(err);
+  }
+);
 
-app.post("/api/report/bug", async (clientReq, clientRes, next) => {
-  // try {
-  const { name, path } = clientReq.files.report;
-  await fsp.writeFile("./reports/" + name, await fsp.readFile(path));
-  // @! палка
-  //
-  clientReq.resBody = { msg: "we have received your report" };
-  clientRes.status(200).send(clientReq.resBody);
-  next(clientRes);
-  // } catch (err) {
-  //   next(err);
-  // } finally {
-  //   next(clientRes);
-  // }
-});
+app.use(router);
 
-app.use((err, req, res, next) => {
+app.use((error, req, res, next) => {
+  error && console.log("error express");
+
   // if (err) {
   //   res.status(500).json({ error: err?.toString() });
   //   console.error("--- ERROR ---\n", err.stack);
   // }
-  logResponse(res, true);
+  // logResponse(res, true);
 });
 
 app.listen(port, () => {
