@@ -29,7 +29,6 @@ outFetch.interceptors.request.use(
     return req;
   },
   (err) => {
-    console.log("error axios request");
     throw err;
   }
 );
@@ -39,8 +38,7 @@ outFetch.interceptors.response.use(
     return res;
   },
   (err) => {
-    console.log("error axios response");
-    console.log(err);
+    logResponse(err.response, false);
     throw err;
   }
 );
@@ -108,9 +106,11 @@ router.post("/api/report/bug", async (clientReq, clientRes, next) => {
 router.use((err, req, res, next) => {
   if (err instanceof Error) {
     res
-      .status(err?.response?.status || 500)
-      .send(err?.message || "Something went wrong");
-  } else logResponse(res);
+      .status(err.response?.status || 500)
+      .send(err.response?.data || "Something went wrong");
+    res.body = err.response?.data;
+  }
+  logResponse(res);
 });
 
 module.exports = router;
