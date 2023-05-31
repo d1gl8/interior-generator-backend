@@ -110,8 +110,7 @@ router.use((err, req, res, next) => {
     res
       .status(err?.response?.status || 500)
       .send(err?.message || "Something went wrong");
-  }
-  logResponse(res);
+  } else logResponse(res);
 });
 
 module.exports = router;
