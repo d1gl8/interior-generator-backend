@@ -40,6 +40,7 @@ outFetch.interceptors.response.use(
   },
   (err) => {
     console.log("error axios response");
+    console.log(err);
     throw err;
   }
 );
